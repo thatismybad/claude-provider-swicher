@@ -120,18 +120,28 @@ xcodebuild -scheme "Claude Provider Switcher" -configuration Release
 
 The built app will be in `build/Build/Products/Release/`.
 
+### Create DMG Installer
+
+To create a distributable DMG with drag-and-drop installation:
+
+```bash
+brew install create-dmg
+
+create-dmg \
+  --volname "Claude Provider Switcher" \
+  --window-pos 200 120 \
+  --window-size 600 400 \
+  --icon-size 100 \
+  --icon "Claude Provider Switcher.app" 150 190 \
+  --hide-extension "Claude Provider Switcher.app" \
+  --app-drop-link 450 190 \
+  Claude-Provider-Switcher.dmg \
+  "build/Build/Products/Release/Claude Provider Switcher.app"
+```
+
 ## License
 
-**MIT License with Non-Commercial Clause**
-
-Copyright (c) 2026 Michal Macinka
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use, copy, modify, merge, and distribute the Software for **non-commercial purposes only**, subject to the following conditions:
-
-- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-- **The Software may not be sold, sublicensed, or used for commercial purposes without explicit written permission from the copyright holder.**
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+This project is licensed under the MIT License with a Non-Commercial Clause — see the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
