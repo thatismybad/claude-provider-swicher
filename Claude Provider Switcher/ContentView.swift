@@ -100,12 +100,21 @@ struct ContentView: View {
 
             Divider()
 
-            Button("Quit") {
-                NSApplication.shared.terminate(nil)
+            HStack {
+                Text("v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?")")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.tertiary)
+
+                Spacer()
+
+                Button("Quit") {
+                    NSApplication.shared.terminate(nil)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+                .font(.caption)
             }
-            .buttonStyle(.plain)
-            .foregroundStyle(.secondary)
-            .font(.caption)
+            .padding(.horizontal, 16)
             .padding(.vertical, 8)
         }
         .frame(width: 320)

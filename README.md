@@ -1,5 +1,9 @@
 # Claude Provider Switcher
 
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/thatismybad/claude-provider-swicher/releases)
+[![Platform](https://img.shields.io/badge/platform-macOS%2014%2B-lightgrey.svg)]()
+[![License](https://img.shields.io/badge/license-MIT%20(Non--Commercial)-green.svg)](LICENSE)
+
 A simple macOS menu bar app to seamlessly switch between Claude Code subscription mode and OpenRouter API mode.
 
 ![App Icon](Claude%20Provider%20Switcher/Assets.xcassets/AppIcon.appiconset/icon_512x512.png)
