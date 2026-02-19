@@ -14,7 +14,7 @@ struct ContentView: View {
     @State private var apiKey: String = ""
     @State private var statusMessage: String = ""
     @State private var isError: Bool = false
-    @State private var keychainKey: String = ""
+    @State private var savedApiKey: String = ""
 
     private var activeMode: ProviderMode {
         appState.currentMode
@@ -51,7 +51,7 @@ struct ContentView: View {
                     SecureField("OpenRouter API Key", text: $apiKey)
                         .textFieldStyle(.roundedBorder)
 
-                    Text("Stored securely in Keychain.")
+                    Text("Stored in the provider configuration file.")
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
 
@@ -87,7 +87,7 @@ struct ContentView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                .disabled(selectedMode == activeMode && (selectedMode == .subscription || !apiKey.isEmpty && apiKey == keychainKey))
+                .disabled(selectedMode == activeMode && (selectedMode == .subscription || !apiKey.isEmpty && apiKey == savedApiKey))
 
                 Button(action: { ProviderManager.openInFinder() }) {
                     Image(systemName: "folder")
@@ -123,7 +123,7 @@ struct ContentView: View {
         }
         .onChange(of: selectedMode) { _, newMode in
             if newMode == .openrouter && apiKey.isEmpty {
-                apiKey = keychainKey
+                apiKey = savedApiKey
             }
         }
     }
@@ -226,9 +226,9 @@ struct ContentView: View {
 
     private func loadConfiguration() {
         selectedMode = ProviderManager.detectMode()
-        keychainKey = KeychainHelper.load() ?? ""
+        savedApiKey = ProviderManager.loadApiKey() ?? ""
         if selectedMode == .openrouter {
-            apiKey = keychainKey
+            apiKey = savedApiKey
         }
     }
 
@@ -242,18 +242,10 @@ struct ContentView: View {
             return
         }
 
-        if selectedMode == .openrouter {
-            guard KeychainHelper.save(key: apiKey) else {
-                statusMessage = "Failed to save API key to Keychain."
-                isError = true
-                return
-            }
-            keychainKey = apiKey
-        }
-
         do {
             try ProviderManager.writeProviderFile(mode: selectedMode, apiKey: selectedMode == .openrouter ? apiKey : nil)
             appState.refresh()
+            savedApiKey = selectedMode == .openrouter ? apiKey : ""
             statusMessage = "Activated. Open a new terminal or reload your shell (source ~/.zshrc)."
             isError = false
         } catch {
@@ -263,10 +255,8 @@ struct ContentView: View {
     }
 
     private func clearKey() {
-        _ = KeychainHelper.delete()
         apiKey = ""
-        keychainKey = ""
-        statusMessage = "API key cleared from Keychain."
+        statusMessage = "API key cleared."
         isError = false
     }
 }

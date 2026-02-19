@@ -19,6 +19,21 @@ enum ProviderManager {
         return content.contains("openrouter.ai/api") ? .openrouter : .subscription
     }
 
+    static func loadApiKey() -> String? {
+        guard let content = try? String(contentsOfFile: filePath, encoding: .utf8) else {
+            return nil
+        }
+
+        for line in content.components(separatedBy: "\n") {
+            let prefix = "export OPENROUTER_API_KEY=\""
+            if line.hasPrefix(prefix) {
+                return String(line.dropFirst(prefix.count).dropLast())
+            }
+        }
+
+        return nil
+    }
+
     static func writeProviderFile(mode: ProviderMode, apiKey: String? = nil) throws {
         let directoryPath = (filePath as NSString).deletingLastPathComponent
         try FileManager.default.createDirectory(atPath: directoryPath, withIntermediateDirectories: true)
